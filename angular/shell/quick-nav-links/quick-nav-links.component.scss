@@ -1,0 +1,249 @@
+$text-white: #ffffff;
+$must-blue: #022561;
+$must-green: var(--secondary-color);
+
+.quick-nav-root {
+  max-width: 100%;
+}
+
+.hero-nav-pill-shell {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.hero-quick-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  // Let clicks pass through flex gaps and the dropdown padding reserve below the pills
+  // (hero-content z-index can sit above page content; dead area must not block search, etc.)
+  pointer-events: none;
+}
+
+.hero-quick-nav-scroll-btn {
+  pointer-events: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: $text-white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    color: $must-green;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .hero-quick-nav-scroll-icon {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 36px;
+    min-height: 36px;
+
+    .hero-quick-nav-scroll-icon {
+      font-size: 12px;
+    }
+  }
+}
+
+// Viewport shows ~5.5 pills; scroll horizontally. overflow-y must not clip dropdown panels.
+$dropdown-reserve: 230px;
+
+.hero-quick-nav-scroll {
+  $pill-gap: 8px;
+  $pill-w: 132px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: min(100%, calc(5.5 * #{$pill-w} + 5 * #{$pill-gap}));
+  margin: 0 auto;
+  margin-bottom: -#{$dropdown-reserve};
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  padding: 4px 2px calc(10px + #{$dropdown-reserve});
+  scrollbar-width: none;
+  // Padding-bottom reserve must not capture clicks over content below the hero
+  pointer-events: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 1200px) {
+    $pill-gap-lg: 10px;
+    $pill-w-lg: 138px;
+    max-width: min(100%, calc(5.5 * #{$pill-w-lg} + 5 * #{$pill-gap-lg}));
+  }
+}
+
+.hero-quick-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  min-width: 100%;
+  margin: 0 auto;
+  padding: 0 2px;
+  pointer-events: auto;
+
+  @media (min-width: 1200px) {
+    gap: 10px;
+  }
+}
+
+.nav-pill {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 50px;
+  padding: 10px 18px;
+  color: $text-white;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: $must-green;
+    text-decoration: none;
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.35);
+    color: $text-white;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+.hero-nav-dropdown {
+  position: relative;
+  flex-shrink: 0;
+
+  @media (min-width: 992px) {
+    &:hover .hero-dropdown-chevron,
+    &:focus-within .hero-dropdown-chevron {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.is-open .hero-dropdown-chevron {
+    @media (max-width: 991px) {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.nav-pill-dropdown-trigger {
+  cursor: pointer;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-dropdown-chevron {
+  font-size: 0.7em;
+  opacity: 0.9;
+  transition: transform 0.2s ease;
+}
+
+.hero-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 260px;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  text-align: start;
+  background: $must-blue;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 100;
+
+  .quick-nav-root[dir="rtl"] & {
+    left: auto;
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-nav-dropdown:hover .hero-dropdown-panel,
+  .hero-nav-dropdown:focus-within .hero-dropdown-panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero-nav-dropdown.is-open .hero-dropdown-panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+.hero-dropdown-link {
+  display: block;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $must-green;
+  }
+}

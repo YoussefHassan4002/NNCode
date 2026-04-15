@@ -1,0 +1,81 @@
+<div class="dashboard-page" [attr.dir]="(langService.currentLang$ | async) === 'ar' ? 'rtl' : 'ltr'">
+    <app-hero-banner></app-hero-banner>
+
+    <!-- ========== STATS SECTION ========== -->
+    <section class="stats-section" *ngIf="stats$ | async as stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="stat-value">{{ stats.totalIdeas }}</div>
+                    <div class="stat-label">{{ langService.translate('dashboard.stats.ideas') }}</div>
+                </div>
+                <div class="stat-card highlight-reserved">
+                    <div class="stat-icon"><i class="fas fa-bookmark"></i></div>
+                    <div class="stat-value">{{ stats.reservedIdeas }}</div>
+                    <div class="stat-label">{{ langService.translate('dashboard.stats.reserved') }}</div>
+                </div>
+                <div class="stat-card highlight-approved">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-value">{{ stats.approvedIdeas }}</div>
+                    <div class="stat-label">{{ langService.translate('dashboard.stats.approved') }}</div>
+                </div>
+                <div class="stat-card highlight-doctors">
+                    <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="stat-value">{{ stats.totalDoctors }}</div>
+                    <div class="stat-label">{{ langService.translate('dashboard.stats.doctors') }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== NEWS & DEADLINES ========== -->
+    <div class="container">
+        <div class="dashboard-content-grid">
+            <div class="main-column">
+                <section class="card news-section">
+                    <h3><i class="fas fa-bullhorn"></i> {{ langService.translate('dashboard.newsTitle') }}</h3>
+                    <div class="news-list" *ngIf="news$ | async as newsItems">
+                        <div class="news-item" *ngFor="let item of newsItems | slice:0:3">
+                            <span class="date">{{ item.publishDate | date:'yyyy/MM/dd' }}</span>
+                            <h4>{{ item.title }}</h4>
+                            <p>{{ item.content | slice:0:150 }}{{ item.content.length > 150 ? '...' : '' }}</p>
+                        </div>
+                        <div class="empty-state" *ngIf="newsItems.length === 0">
+                            <p>لا توجد أخبار حالياً.</p>
+                        </div>
+                    </div>
+                    <a routerLink="/news/all" class="btn-link">{{ langService.translate('dashboard.viewAll') }} ←</a>
+                </section>
+            </div>
+
+            <div class="side-column">
+                <section class="card deadline-section">
+                    <h3><i class="fas fa-clock"></i> {{ langService.translate('dashboard.deadlineTitle') }}</h3>
+                    <ul class="deadline-list">
+                        <li class="urgent">
+                            <strong>تسليم الـ Proposal</strong>
+                            <span>متبقي 5 أيام</span>
+                        </li>
+                        <li>
+                            <strong>المراجعة الأولى</strong>
+                            <span>بعد 14 يوم</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="card quick-links">
+                    <h3><i class="fas fa-link"></i> {{ langService.translate('dashboard.quickLinksTitle') }}</h3>
+                    <nav>
+                        <a routerLink="/submission/proposal" class="btn btn-primary w-full mb-1">
+                            <i class="fas fa-upload"></i> {{ langService.translate('dashboard.forms.submitIdea') }}
+                        </a>
+                        <a routerLink="/templates" class="btn btn-secondary w-full">
+                            <i class="fas fa-download"></i> {{ langService.translate('dashboard.forms.downloadTemplates') }}
+                        </a>
+                    </nav>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
